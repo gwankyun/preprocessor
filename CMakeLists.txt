@@ -52,10 +52,6 @@ target_include_directories(${target}
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
-if(NOT Boost_ROOT)
-  set(Boost_ROOT "C:/Program Files/boost_1_77_0")
-endif()
-
 find_package(Boost REQUIRED)
 
 target_link_libraries(${target} INTERFACE Boost::headers)
@@ -63,7 +59,7 @@ target_link_libraries(${target} INTERFACE Boost::headers)
 target_install(${target} "0.0.1")
 
 # 生成執行文件
-set(main main)
+set(main preprocessor_main)
 add_executable(${main})
 
 target_sources(${main}
