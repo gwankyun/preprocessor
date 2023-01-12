@@ -52,27 +52,35 @@ target_include_directories(${target}
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
+if(NOT Boost_ROOT)
+  set(Boost_ROOT "C:/Program Files/boost_1_77_0")
+endif()
+
 find_package(Boost REQUIRED)
 
 target_link_libraries(${target} INTERFACE Boost::headers)
 
 target_install(${target} "0.0.1")
 
-# 生成執行文件
-set(main preprocessor_main)
-add_executable(${main})
+string(COMPARE EQUAL ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} cmp)
 
-target_sources(${main}
-  PRIVATE
-    src/main.cpp
-    include/preprocessor.hpp
-    cmake/Findpreprocessor.cmake
-)
+if(cmp)
+  # 生成執行文件
+  set(main preprocessor_main)
+  add_executable(${main})
 
-# 引用庫
-target_link_libraries(${main}
-  PUBLIC
-    preprocessor
-)
+  target_sources(${main}
+    PRIVATE
+      src/main.cpp
+      include/preprocessor.hpp
+      cmake/Findpreprocessor.cmake
+  )
 
-target_compile_features(${main} PRIVATE cxx_std_17)
+  # 引用庫
+  target_link_libraries(${main}
+    PUBLIC
+      preprocessor
+  )
+
+  target_compile_features(${main} PRIVATE cxx_std_17)
+endif()
